@@ -25,6 +25,9 @@ import com.example.geniusplaza.usertouserchat.Model.InboxObj;
 import com.example.geniusplaza.usertouserchat.Model.User;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +44,7 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
     InboxAdapter inboxAdapter;
     ArrayList<User> allUsersList=new ArrayList<>();
     ArrayList<InboxObj> allInboxList=new ArrayList<>();
+    private GoogleApiClient mGoogleApiClient;
     private RecyclerView.LayoutManager horizontalLayoutManager,verticalLayoutManager;
     private CharSequence options[] = new CharSequence[] {"View Profile", "Send Message"};
 
@@ -130,12 +134,9 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
                 return true;
             case R.id.item_option_logout:
                 FirebaseAuth.getInstance().signOut();
-
                 Intent intent1=new Intent(this, MainActivity.class);
                 startActivity(intent1);
                 finish();
-
-                LoginManager.getInstance().logOut();
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -158,9 +159,9 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (which==0){
-
+                                User clickedUser=allUsersList.get(position);
                                 Intent intent=new Intent(UserPageActivity.this,ViewUserProfile.class);
-                                intent.putExtra("clickedUser",allUsersList.get(position));
+                                intent.putExtra("clickedUser",clickedUser);
                                 startActivity(intent);
                                 finish();
                             }else if (which==1){
@@ -205,4 +206,3 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
         startActivity(intent);
     }
 }
-

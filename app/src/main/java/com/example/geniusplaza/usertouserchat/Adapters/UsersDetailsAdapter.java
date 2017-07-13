@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class UsersDetailsAdapter extends RecyclerView.Adapter<UsersDetailsAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<User> mData;
+    private ArrayList<User> mData = new ArrayList<>();
 
     public UsersDetailsAdapter(Context mContext, ArrayList<User> mData) {
         this.mContext = mContext;

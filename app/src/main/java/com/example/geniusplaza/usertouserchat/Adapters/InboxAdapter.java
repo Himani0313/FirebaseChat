@@ -1,17 +1,32 @@
 package com.example.geniusplaza.usertouserchat.Adapters;
 
+
+
+/**
+ * Created by geniusplaza on 7/12/17.
+ */
+
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.geniusplaza.usertouserchat.Model.InboxObj;
 import com.example.geniusplaza.usertouserchat.Model.User;
 import com.example.geniusplaza.usertouserchat.R;
+import com.example.geniusplaza.usertouserchat.UserPageActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,9 +38,10 @@ import com.squareup.picasso.Picasso;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
- * Created by geniusplaza on 7/12/17.
+ * Created by amrut on 11/22/2016.
  */
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
@@ -37,6 +53,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     private SimpleDateFormat dateFormat1=new SimpleDateFormat("MMM dd,EEE HH:mm");
     User receiverUser;
     InboxInterface inboxInterfaceListener;
+    Random random = new Random();
+    int m = random.nextInt(9999 - 1000) + 1000;
 
     public InboxAdapter(ArrayList<InboxObj> mData, Context mContext) {
         Log.d("demo","inConstructor");
@@ -102,6 +120,10 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     Log.d("demo","receiverUser  profile"+receiverUser.getUserPicUrl());
                     inboxUserName.setText(receiverUser.getFirstName()+" "+receiverUser.getLastName());
 
+                    if(inboxObj.getIslastMsgSeen() == false) {
+                        popUpNotification(receiverUser.getFirstName(), inboxObj.getLastMsg().getMsgContent());
+                    }
+
                     if(!receiverUser.getUserPicUrl().isEmpty()){
                         Log.d("demo","inboxpicnotnul");
                         Picasso.with(getContext()).load(receiverUser.getUserPicUrl()).into(inboxUserPic);
@@ -118,7 +140,11 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Log.d("demo","clickedInboxItem");
                     InboxObj current_object = inboxObj;
+                    if(current_object.getIslastMsgSeen() == true){
+                        return;
+                    }
                     current_object.setIslastMsgSeen(true);
+                    Log.d("Onclick Username: ", receiverUser.getFirstName());
                     mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").child(receiverUser.getUid()).setValue(current_object);
                     inboxInterfaceListener.onItemClick(receiverUser);
                 }
@@ -170,6 +196,23 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         public void onItemClick(User user);
     }
 
+    public void popUpNotification(String firstName, String msgText) {
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(mContext)
+                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setContentTitle(firstName)
+                        .setContentText(msgText)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setVisibility(View.INVISIBLE)
+                        .setPriority(Notification.PRIORITY_HIGH);
+
+
+        NotificationManager notificationManager =
+                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(m/* ID of notification */, mBuilder.build());
+        notificationManager.cancel(m);
+    }
 }
-
