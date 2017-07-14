@@ -40,9 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by amrut on 11/22/2016.
- */
+
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
 
@@ -51,16 +49,35 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     private DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
     private SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private SimpleDateFormat dateFormat1=new SimpleDateFormat("MMM dd,EEE HH:mm");
-    User receiverUser;
+    public User receiverUser;
+    ArrayList<User> receiverUserPassed = new ArrayList<>();
     InboxInterface inboxInterfaceListener;
     Random random = new Random();
     int m = random.nextInt(9999 - 1000) + 1000;
 
-    public InboxAdapter(ArrayList<InboxObj> mData, Context mContext) {
+    public InboxAdapter(final ArrayList<InboxObj> mData, Context mContext) {
+        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mData.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    InboxObj inboxObj = ds.getValue(InboxObj.class);
+                    Log.d("DB Snapshot: ", "inboxMsg " + inboxObj.getSenderID().toString());
+                    mData.add(inboxObj);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         Log.d("demo","inConstructor");
         this.mData = mData;
         this.mContext = mContext;
         inboxInterfaceListener = (InboxInterface) mContext;
+        Log.d("Data array in adapter", mData.toString());
+        Log.d("Size", String.valueOf(mData.size()));
     }
 
     private Context getContext() {
@@ -80,10 +97,11 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d("demo","onBindVieInboxAdapter"+mData.get(position).toString());
+        Log.d("Position",String.valueOf(position));
         final InboxObj inboxObj=mData.get(position);
-
+        Log.d("inbox objects order:", inboxObj.toString());
         final ImageView inboxUserPic=holder.inboxUserPic;
         final TextView inboxUserName=holder.inboxUserName;
         TextView inboxMsgTimeStamp=holder.inboxMsgTimeStamp;
@@ -101,13 +119,27 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     receiverUser = dataSnapshot.getValue(User.class);
                     Log.d("demo","receiverUserprofile"+receiverUser.toString());
                     inboxUserName.setText(receiverUser.getFirstName()+" "+receiverUser.getLastName());
-
+                    receiverUserPassed.add(receiverUser);
                     if(receiverUser.getUserPicUrl() != null && !receiverUser.getUserPicUrl().isEmpty()){
                         Picasso.with(getContext()).load(receiverUser.getUserPicUrl()).into(inboxUserPic);
                     }
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("ONCLICK POSITION",String.valueOf(position));
+                    Log.d("ONCLICK Sender Id", inboxObj.getSenderID());
+                    Log.d("ONCLICK Receiver", inboxObj.getReceiverID());
+                    Log.d("ONCLICK receiverUser", receiverUser.getUid());
+                    Log.d("ONCLICK receiver Name", receiverUser.getFirstName());
+
+
+                    inboxInterfaceListener.onItemClick(receiverUserPassed.get(position));
 
                 }
             });
@@ -119,10 +151,10 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     receiverUser = dataSnapshot.getValue(User.class);
                     Log.d("demo","receiverUser  profile"+receiverUser.getUserPicUrl());
                     inboxUserName.setText(receiverUser.getFirstName()+" "+receiverUser.getLastName());
-
-                    if(inboxObj.getIslastMsgSeen() == false) {
-                        popUpNotification(receiverUser.getFirstName(), inboxObj.getLastMsg().getMsgContent());
-                    }
+                    receiverUserPassed.add(receiverUser);
+//                    if(inboxObj.getIslastMsgSeen() == false) {
+//                        popUpNotification(receiverUser.getFirstName(), inboxObj.getLastMsg().getMsgContent());
+//                    }
 
                     if(!receiverUser.getUserPicUrl().isEmpty()){
                         Log.d("demo","inboxpicnotnul");
@@ -138,6 +170,8 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    Log.d("Inbox ObjectSelected",inboxObj.toString());
                     Log.d("demo","clickedInboxItem");
                     InboxObj current_object = inboxObj;
                     if(current_object.getIslastMsgSeen() == true){
@@ -145,8 +179,16 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     }
                     current_object.setIslastMsgSeen(true);
                     Log.d("Onclick Username: ", receiverUser.getFirstName());
-                    mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").child(receiverUser.getUid()).setValue(current_object);
-                    inboxInterfaceListener.onItemClick(receiverUser);
+                    mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").child(receiverUserPassed.get(position).getUid()).setValue(current_object);
+
+                    Log.d("ONCLICK POSITION",String.valueOf(position));
+                    Log.d("ONCLICK Sender Id", inboxObj.getSenderID());
+                    Log.d("ONCLICK Receiver", inboxObj.getReceiverID());
+                    Log.d("ONCLICK receiverUser", receiverUser.getUid());
+                    Log.d("ONCLICK receiver Name", receiverUser.getFirstName());
+
+                    inboxInterfaceListener.onItemClick(receiverUserPassed.get(position));
+
                 }
             });
         }

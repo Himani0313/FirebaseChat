@@ -100,7 +100,7 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
                 allInboxList.clear();
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
                     InboxObj inboxObj=ds.getValue(InboxObj.class);
-                    Log.d("demo","inboxMsg "+inboxObj.toString());
+                    Log.d("DB Snapshot UP: ", "inboxMsg " + inboxObj.getSenderID().toString());
                     allInboxList.add(inboxObj);
                 }
                 showInboxItems();
@@ -117,6 +117,7 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
     protected void onStart() {
         super.onStart();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
