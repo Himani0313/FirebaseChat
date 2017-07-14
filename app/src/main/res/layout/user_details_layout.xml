@@ -4,17 +4,23 @@
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_marginTop="15dp"
-        android:layout_height="70dp"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/imageUserPic"
+        android:layout_marginTop="15dp"
         android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/com_facebook_profile_picture_blank_portrait"
+        app:border="true"
+        app:border_color="#EEEEEE"
+        app:border_width="1dp"
+        app:shadow="true"
         android:layout_marginLeft="19dp"
         android:layout_marginStart="19dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        />
 
     <TextView
         android:text="TextView"
@@ -23,8 +29,6 @@
         android:id="@+id/textViewUserName"
         android:textSize="15dp"
         android:layout_below="@+id/imageUserPic"
-        android:layout_alignLeft="@+id/imageUserPic"
-        android:layout_alignStart="@+id/imageUserPic"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="6dp"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.geniusplaza.usertouserchat.Model.User;
 import com.example.geniusplaza.usertouserchat.R;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class UsersDetailsAdapter extends RecyclerView.Adapter<UsersDetailsAdapte
     public void onBindViewHolder(UsersDetailsAdapter.ViewHolder holder, int position) {
         User user=mData.get(position);
         TextView userName=holder.textViewUserName;
-        ImageView userPic=holder.imgViewUserPic;
+        CircularImageView userPic=holder.imgViewUserPic;
 
         userName.setText(user.getFirstName());
         if (user.getUserPicUrl()!=null && !user.getUserPicUrl().isEmpty()) {
@@ -66,13 +67,13 @@ public class UsersDetailsAdapter extends RecyclerView.Adapter<UsersDetailsAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView textViewUserName;
-        ImageView imgViewUserPic;
+        CircularImageView imgViewUserPic;
         User user;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewUserName= (TextView) itemView.findViewById(R.id.textViewUserName);
-            imgViewUserPic= (ImageView) itemView.findViewById(R.id.imageUserPic);
+            imgViewUserPic= (CircularImageView) itemView.findViewById(R.id.imageUserPic);
         }
     }
 

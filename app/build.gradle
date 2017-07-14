@@ -36,7 +36,9 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.firebase:firebase-storage:11.0.2'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'org.ocpsoft.prettytime:prettytime:3.2.7.Final'
+
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
