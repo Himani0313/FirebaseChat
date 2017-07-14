@@ -13,7 +13,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="14dp"
         android:id="@+id/senderMessageLayout"
-        android:background="@drawable/borders">
+        android:background="@drawable/borders"
+        android:paddingLeft="20dp">
 
 
         <TextView
@@ -49,7 +50,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/senderMessageLayout"
         android:id="@+id/receiverMessageLayout"
-        android:background="@drawable/borders">
+        android:background="@drawable/borders"
+        android:paddingLeft="20dp">
 
 
         <TextView

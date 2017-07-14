@@ -8,6 +8,7 @@ package com.example.geniusplaza.usertouserchat.Adapters;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.geniusplaza.usertouserchat.MainActivity;
 import com.example.geniusplaza.usertouserchat.Model.InboxObj;
 import com.example.geniusplaza.usertouserchat.Model.User;
 import com.example.geniusplaza.usertouserchat.R;
@@ -40,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
@@ -52,8 +55,10 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     public User receiverUser;
     ArrayList<User> receiverUserPassed = new ArrayList<>();
     InboxInterface inboxInterfaceListener;
+    public int counter = 0;
     Random random = new Random();
     int m = random.nextInt(9999 - 1000) + 1000;
+    private static final int NOTIFICATION_ID = 1;
 
     public InboxAdapter(final ArrayList<InboxObj> mData, Context mContext) {
         mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").addValueEventListener(new ValueEventListener() {
@@ -152,9 +157,11 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     Log.d("demo","receiverUser  profile"+receiverUser.getUserPicUrl());
                     inboxUserName.setText(receiverUser.getFirstName()+" "+receiverUser.getLastName());
                     receiverUserPassed.add(receiverUser);
-//                    if(inboxObj.getIslastMsgSeen() == false) {
-//                        popUpNotification(receiverUser.getFirstName(), inboxObj.getLastMsg().getMsgContent());
-//                    }
+
+                    if(inboxObj.getIslastMsgSeen() == false) {
+                        ++counter;
+                        popUpNotification(counter);
+                    }
 
                     if(!receiverUser.getUserPicUrl().isEmpty()){
                         Log.d("demo","inboxpicnotnul");
@@ -174,9 +181,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     Log.d("Inbox ObjectSelected",inboxObj.toString());
                     Log.d("demo","clickedInboxItem");
                     InboxObj current_object = inboxObj;
-                    if(current_object.getIslastMsgSeen() == true){
-                        return;
-                    }
                     current_object.setIslastMsgSeen(true);
                     Log.d("Onclick Username: ", receiverUser.getFirstName());
                     mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").child(receiverUserPassed.get(position).getUid()).setValue(current_object);
@@ -186,6 +190,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     Log.d("ONCLICK Receiver", inboxObj.getReceiverID());
                     Log.d("ONCLICK receiverUser", receiverUser.getUid());
                     Log.d("ONCLICK receiver Name", receiverUser.getFirstName());
+                    counter--;
 
                     inboxInterfaceListener.onItemClick(receiverUserPassed.get(position));
 
@@ -238,23 +243,22 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         public void onItemClick(User user);
     }
 
-    public void popUpNotification(String firstName, String msgText) {
+    public void popUpNotification(int msgCount) {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)
                         .setSmallIcon(R.mipmap.ic_launcher_round)
-                        .setContentTitle(firstName)
-                        .setContentText(msgText)
+                        .setContentTitle("You Have A New Message!")
+                        .setContentText("You have:" + String.valueOf(msgCount) + "messages!")
                         .setDefaults(Notification.DEFAULT_ALL)
-                        .setVisibility(View.INVISIBLE)
                         .setPriority(Notification.PRIORITY_HIGH);
 
 
         NotificationManager notificationManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(m/* ID of notification */, mBuilder.build());
+        notificationManager.notify(m /*ID of notification*/ , mBuilder.build());
         notificationManager.cancel(m);
     }
 }

@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/chat_activity"
     tools:context="com.example.geniusplaza.usertouserchat.ProfileDetailsActivity">
 
     <TextView
@@ -19,7 +20,8 @@
         android:layout_toRightOf="@+id/textViewFNameLabel"
         android:layout_toEndOf="@+id/textViewFNameLabel"
         android:layout_marginLeft="25dp"
-        android:id="@+id/textViewUserFName" />
+        android:id="@+id/textViewUserFName"
+        android:gravity="center"/>
 
     <TextView
         android:text="@string/last_name_label"
@@ -29,7 +31,9 @@
         android:id="@+id/textViewLNameLabel"
         android:layout_below="@+id/textViewFNameLabel"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="40dp"
+        />
 
     <TextView
         android:text="TextView"
@@ -38,7 +42,8 @@
         android:layout_alignBottom="@+id/textViewLNameLabel"
         android:layout_alignLeft="@+id/textViewUserFName"
         android:layout_alignStart="@+id/textViewUserFName"
-        android:id="@+id/textViewEditLName" />
+        android:id="@+id/textViewEditLName"
+        android:gravity="center"/>
 
     <TextView
         android:text="@string/gender_label"
@@ -48,7 +53,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="30dp"
-        android:id="@+id/textViewGenderLabel" />
+        android:id="@+id/textViewGenderLabel"
+        android:layout_marginLeft="40dp"/>
 
     <TextView
         android:text="TextView"
@@ -57,7 +63,8 @@
         android:layout_alignTop="@+id/textViewGenderLabel"
         android:layout_alignLeft="@+id/textViewEditLName"
         android:layout_alignStart="@+id/textViewEditLName"
-        android:id="@+id/textViewUserGender" />
+        android:id="@+id/textViewUserGender"
+        android:gravity="center"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -65,7 +72,8 @@
         app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
         android:id="@+id/imageViewProfilePics"
         android:layout_above="@+id/textViewUserFName"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:text="@string/first_name_label"
@@ -75,7 +83,8 @@
         android:id="@+id/textViewFNameLabel"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="40dp"/>
 
     <ImageView
         app:srcCompat="@drawable/profile_edit"
@@ -90,10 +99,9 @@
         android:text="@string/btn_ok_label"
         android:layout_height="wrap_content"
         android:id="@+id/buttonOk"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="90dp"
         android:layout_width="250dp"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/textViewGenderLabel"
-        android:layout_toEndOf="@+id/textViewGenderLabel" />
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

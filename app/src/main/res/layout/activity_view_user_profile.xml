@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/chat_activity"
     tools:context="com.example.geniusplaza.usertouserchat.ViewUserProfile">
 
     <TextView
@@ -16,10 +17,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="24dp"
-        android:id="@+id/textViewProfilePicLabel" />
+        android:id="@+id/textViewProfilePicLabel"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +29,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="25dp"
         android:id="@+id/textViewUFname"
-        android:text="@string/first_name_label" />
+        android:text="@string/first_name_label"
+        android:layout_marginLeft="40dp"/>
 
     <TextView
         android:text="TextView"
@@ -48,7 +49,8 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/textViewULName" />
+        android:id="@+id/textViewULName"
+        android:layout_marginLeft="40dp"/>
 
     <TextView
         android:text="TextView"
@@ -67,7 +69,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="27dp"
-        android:id="@+id/textViewUGender" />
+        android:id="@+id/textViewUGender"
+        android:layout_marginLeft="40dp"/>
 
     <TextView
         android:text="TextView"
@@ -78,16 +81,6 @@
         android:layout_alignStart="@+id/textViewShowULName"
         android:id="@+id/textViewShowUGender" />
 
-    <Button
-        android:text="@string/back_btn_label"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:id="@+id/buttonBack"
-        android:layout_below="@+id/textViewUGender"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <ImageView
         app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
         android:layout_marginTop="16dp"
@@ -95,8 +88,7 @@
         android:layout_height="100dp"
         android:layout_width="wrap_content"
         android:layout_below="@+id/textViewProfilePicLabel"
-        android:layout_toRightOf="@+id/textViewULName"
-        android:layout_toEndOf="@+id/textViewULName" />
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
 

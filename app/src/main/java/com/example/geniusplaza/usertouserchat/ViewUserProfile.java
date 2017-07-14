@@ -16,7 +16,6 @@ public class ViewUserProfile extends AppCompatActivity {
 
     TextView userFName,userLName,userGender;
     ImageView userProfilePic;
-    Button btnBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +24,6 @@ public class ViewUserProfile extends AppCompatActivity {
         userLName= (TextView) findViewById(R.id.textViewShowULName);
         userGender= (TextView) findViewById(R.id.textViewShowUGender);
         userProfilePic= (ImageView) findViewById(R.id.imageViewUserProfilePicture);
-        btnBack= (Button) findViewById(R.id.buttonBack);
 
         if (getIntent().getExtras().getSerializable("clickedUser")!=null){
             User user= (User) getIntent().getExtras().getSerializable("clickedUser");
@@ -39,15 +37,5 @@ public class ViewUserProfile extends AppCompatActivity {
         }else {
             Toast.makeText(getApplicationContext(),"User not Found",Toast.LENGTH_SHORT).show();
         }
-
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(ViewUserProfile.this,UserPageActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
     }
 }

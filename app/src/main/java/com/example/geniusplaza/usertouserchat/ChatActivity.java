@@ -16,8 +16,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +70,7 @@ public class ChatActivity extends AppCompatActivity {
     private ConversationAdapter conversationAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private GoogleApiClient mGoogleApiClient;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +82,19 @@ public class ChatActivity extends AppCompatActivity {
         sendtextMsg= (ImageView) findViewById(R.id.imageViewSendTextMsg);
         sendImgMsg= (ImageView) findViewById(R.id.ImageViewOpenGallery);
         chatRecyclerView= (RecyclerView) findViewById(R.id.chatRecyclerView);
+        linearLayout =(LinearLayout)findViewById(R.id.linearLayoutChat);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         chatRecyclerView.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(chatRecyclerView);
 
-
+        textMsgContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromInputMethod(textMsgContent.getWindowToken(),0);
+            }
+        });
 
         if (getIntent().getExtras()!=null){
             receivingUser= (User) getIntent().getExtras().getSerializable("receivingUser");
@@ -292,8 +302,6 @@ public class ChatActivity extends AppCompatActivity {
                 Intent intent1=new Intent(this, MainActivity.class);
                 startActivity(intent1);
                 finish();
-
-                LoginManager.getInstance().logOut();
 
             default:
                 return super.onOptionsItemSelected(item);

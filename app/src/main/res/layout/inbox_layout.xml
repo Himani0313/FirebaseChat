@@ -7,7 +7,8 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/rowItemContainer">
+        android:id="@+id/rowItemContainer"
+        android:paddingTop="15dp">
         <ImageView
             android:layout_width="40dp"
             app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
@@ -22,7 +23,8 @@
             android:layout_toRightOf="@+id/imageViewInboxUserPic"
             android:layout_toEndOf="@+id/imageViewInboxUserPic"
             android:id="@+id/textViewInboxUserName"
-            android:textSize="17dp"/>
+            android:textSize="17dp"
+            android:layout_marginLeft="15dp"/>
 
         <TextView
             android:text="TextView"
@@ -41,7 +43,8 @@
             android:id="@+id/textViewInboxUserMessage"
             android:layout_below="@+id/textViewInboxUserName"
             android:layout_toRightOf="@+id/imageViewInboxUserPic"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="15dp"/>
 
         <ImageView
             android:layout_height="20dp"

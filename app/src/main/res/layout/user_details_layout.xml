@@ -25,5 +25,6 @@
         android:layout_below="@+id/imageUserPic"
         android:layout_alignLeft="@+id/imageUserPic"
         android:layout_alignStart="@+id/imageUserPic"
-        android:layout_marginTop="17dp" />
+        android:layout_marginTop="17dp"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

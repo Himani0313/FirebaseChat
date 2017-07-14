@@ -268,5 +268,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
         return byteBuffer.toByteArray();
     }
+
+   @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(SignUpActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
 
