@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
         if (mAuth.getCurrentUser()!=null){
-            Intent intent=new Intent(MainActivity.this,UserPageActivity.class);
+            Intent intent=new Intent(MainActivity.this,DashboardActivity.class);
             startActivity(intent);
             finish();
         }
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Toast.LENGTH_SHORT).show();
                         }else {
                             //go to UserPage activity
-                            Intent intent=new Intent(MainActivity.this,UserPageActivity.class);
+                            Intent intent=new Intent(MainActivity.this,DashboardActivity.class);
                             startActivity(intent);
                             finish();
                         }
