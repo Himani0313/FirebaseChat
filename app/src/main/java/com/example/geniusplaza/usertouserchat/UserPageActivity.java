@@ -2,11 +2,13 @@ package com.example.geniusplaza.usertouserchat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.example.geniusplaza.usertouserchat.Adapters.InboxAdapter;
 import com.example.geniusplaza.usertouserchat.Adapters.RecyclerItemClickListener;
 import com.example.geniusplaza.usertouserchat.Adapters.UsersDetailsAdapter;
@@ -37,9 +40,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
+
 public class UserPageActivity extends AppCompatActivity implements InboxAdapter.InboxInterface{
     private DatabaseReference mDatabase;
-    RecyclerView usersRecyclerView,inboxRecyclerView;
+    RecyclerView usersRecyclerView, inboxRecyclerView;
     UsersDetailsAdapter usersDetailsAdapter;
     InboxAdapter inboxAdapter;
     ArrayList<User> allUsersList=new ArrayList<>();
@@ -59,7 +64,6 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(usersRecyclerView);
         snapHelper.attachToRecyclerView(inboxRecyclerView);
-
 
         mDatabase= FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").addValueEventListener(new ValueEventListener() {
@@ -189,13 +193,14 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
         if (!allInboxList.isEmpty() && allInboxList!=null){
             Log.d("demo","allInboxList"+allInboxList.toString());
             inboxAdapter=new InboxAdapter(allInboxList,UserPageActivity.this);
+            inboxRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
             inboxRecyclerView.setLayoutManager(verticalLayoutManager);
             inboxRecyclerView.setAdapter(inboxAdapter);
             inboxAdapter.notifyDataSetChanged();
 
 
         }else {
-            Toast.makeText(getApplicationContext(),"Your inbox is empty..start a conversation with any of the users",Toast.LENGTH_SHORT).show();
+            Toasty.info(getApplicationContext(),"Your inbox is empty..start a conversation with any of the users",Toast.LENGTH_SHORT, true).show();
         }
     }
 

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context="com.example.geniusplaza.usertouserchat.GroupChatActivity">
+    tools:context="com.example.geniusplaza.usertouserchat.GroupChatActivity"
+    android:background="@drawable/chat_activity">
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"

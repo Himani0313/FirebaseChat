@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import es.dmoral.toasty.Toasty;
+
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText userFirstName,userLastName,userEmail,userPassword1,userPassword2;
     Spinner spinner;
@@ -172,8 +174,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(SignUpActivity.this,"Sign Up Failed..Choose another email",
-                                    Toast.LENGTH_SHORT).show();
+                            Toasty.error(SignUpActivity.this,"Sign Up Failed..Choose another email",
+                                    Toast.LENGTH_SHORT, true).show();
                         }else {
                             onAuthSuccess(task.getResult().getUser());
                         }
@@ -197,7 +199,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
         if (spinner.getSelectedItemPosition()==0){
             valid=false;
-            Toast.makeText(getApplicationContext(),"Please select a gender",Toast.LENGTH_SHORT).show();
+            Toasty.error(getApplicationContext(),"Please select a gender",Toast.LENGTH_SHORT, true).show();
         }else {
             valid=true;
         }
@@ -221,7 +223,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
         if (!userPassword1.getText().toString().equals(userPassword2.getText().toString())){
             valid=false;
-            Toast.makeText(getApplicationContext(),"Passwords doesnot match",Toast.LENGTH_SHORT).show();
+            Toasty.error(getApplicationContext(),"Passwords doesnot match",Toast.LENGTH_SHORT, true).show();
         }
         return valid;
     }
@@ -240,7 +242,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             writeNewUser(user.getUid(), firstName, lastName, gender, "");
         }
 
-        Toast.makeText(getApplicationContext(),"User Created",Toast.LENGTH_SHORT).show();
+        Toasty.success(getApplicationContext(),"User Created",Toast.LENGTH_SHORT, true).show();
 
         // Go to MainActivity
         startActivity(new Intent(SignUpActivity.this, MainActivity.class));

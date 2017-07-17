@@ -29,6 +29,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
+
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
 
@@ -117,7 +119,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             public boolean onLongClick(View v) {
                 mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("chatroom")
                         .child(message.getReceiverId()).child("messages").child(message.getMsgKey()).removeValue();
-                Toast.makeText(getContext(),"Message deleted",Toast.LENGTH_SHORT).show();
+                Toasty.info(getContext(),"Message deleted",Toast.LENGTH_SHORT, true).show();
                 return false;
             }
         });
@@ -127,7 +129,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             public boolean onLongClick(View v) {
                 mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("chatroom")
                         .child(message.getSenderId()).child("messages").child(message.getMsgKey()).removeValue();
-                Toast.makeText(getContext(),"Message deleted",Toast.LENGTH_SHORT).show();
+                Toasty.info(getContext(),"Message deleted",Toast.LENGTH_SHORT, true).show();
                 return false;
             }
         });

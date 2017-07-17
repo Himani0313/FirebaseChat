@@ -31,15 +31,22 @@
         android:textColor="@android:color/white"
         android:textSize="20sp"
         />
-
-    <ImageView
-        android:layout_width="40dp"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
-        android:id="@+id/imageViewReceiverProfilePic"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_height="40dp" />
+        <com.pkmmte.view.CircularImageView
+            android:id="@+id/imageViewReceiverProfilePic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/com_facebook_profile_picture_blank_portrait"
+            app:border="true"
+            app:border_color="#EEEEEE"
+            app:border_width="1dp"
+            app:shadow="true"
+            android:layout_marginLeft="19dp"
+            android:layout_marginStart="19dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            />
 
     <View
         android:layout_width="match_parent"

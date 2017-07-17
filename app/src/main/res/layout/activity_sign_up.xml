@@ -28,7 +28,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:ems="10"
         android:layout_below="@+id/editTextEmailID"
         android:layout_alignParentLeft="true"
@@ -41,7 +41,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:ems="10"
         android:layout_below="@+id/editTextPassword1"
         android:layout_alignParentLeft="true"

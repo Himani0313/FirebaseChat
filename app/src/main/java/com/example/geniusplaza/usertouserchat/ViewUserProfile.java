@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.example.geniusplaza.usertouserchat.Model.User;
 import com.squareup.picasso.Picasso;
 
+import es.dmoral.toasty.Toasty;
+
 public class ViewUserProfile extends AppCompatActivity {
 
     TextView userFName,userLName,userGender;
@@ -35,7 +37,7 @@ public class ViewUserProfile extends AppCompatActivity {
             }
 
         }else {
-            Toast.makeText(getApplicationContext(),"User not Found",Toast.LENGTH_SHORT).show();
+            Toasty.error(getApplicationContext(),"User not Found",Toast.LENGTH_SHORT, true).show();
         }
     }
 }

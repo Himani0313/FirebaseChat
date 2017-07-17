@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.example.geniusplaza.usertouserchat"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -24,6 +24,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
 
 
 
@@ -48,7 +49,13 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.okhttp3:okhttp:2.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
-
+    compile 'com.ibm.watson.developer_cloud:conversation:3.8.0'
+    compile 'com.ibm.watson.developer_cloud:text-to-speech:3.8.0'
+    compile 'com.ibm.watson.developer_cloud:speech-to-text:3.8.0'
+    compile 'com.ibm.watson.developer_cloud:android-sdk:0.2.3'
+    compile 'com.ibm.mobilefirstplatform.clientsdk.android:analytics:1.1.0'
+    compile 'com.github.GrenderG:Toasty:1.2.5'
+    compile 'com.github.sharish:ShimmerRecyclerView:v1.0.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -37,6 +37,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import es.dmoral.toasty.Toasty;
+
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText editUserFName,editUserLName;
@@ -136,12 +138,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 }else {
                     updateUserProfile(existinguserProfile.getUid(), editUserFName.getText().toString(), editUserLName.getText().toString(), userGender.getSelectedItem().toString(),null);
                 }
-                Toast.makeText(getApplicationContext(),"Profile Updated",Toast.LENGTH_SHORT).show();
+                Toasty.success(getApplicationContext(),"Profile Updated",Toast.LENGTH_SHORT, true).show();
                 Intent intent=new Intent(EditProfileActivity.this,ProfileDetailsActivity.class);
                 startActivity(intent);
                 finish();
             }else {
-                Toast.makeText(getApplicationContext(),"Please select gender",Toast.LENGTH_SHORT).show();
+                Toasty.warning(getApplicationContext(),"Please select gender",Toast.LENGTH_SHORT, true).show();
             }
 
         }else if (v.getId()==R.id.buttonCancel){

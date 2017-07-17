@@ -27,7 +27,6 @@
     <EditText
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:inputType="textPersonName"
         android:ems="10"
         android:layout_marginTop="17dp"
         android:id="@+id/editTextPassword"
@@ -35,7 +34,8 @@
         android:background="@drawable/borders"
         android:layout_below="@+id/editTextEmail"
         android:gravity="center_horizontal|center_vertical"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:inputType="textPassword"/>
 
     <EditText
         android:layout_width="250dp"

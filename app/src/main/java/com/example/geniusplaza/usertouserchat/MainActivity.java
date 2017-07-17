@@ -35,6 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import es.dmoral.toasty.Toasty;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -66,10 +68,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    Toasty.success(getApplicationContext(),"Sign in successful!",Toast.LENGTH_SHORT, true).show();
                     Log.d("demo", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
                     Log.d("demo", "onAuthStateChanged:signed_out");
+                    Toasty.success(getApplicationContext(),"Sign out successful!",Toast.LENGTH_SHORT, true).show();
                 }
             }
         };
@@ -123,10 +127,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         if (!task.isSuccessful()) {
                             Log.w("demo", "signInWithEmail:failed", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication Failed",
-                                    Toast.LENGTH_SHORT).show();
+                            Toasty.error(MainActivity.this, "Authentication Failed",
+                                    Toast.LENGTH_SHORT, true).show();
                         }else {
                             //go to UserPage activity
+                            Toasty.success(getApplicationContext(),"Sign in successful!",Toast.LENGTH_SHORT, true).show();
                             Intent intent=new Intent(MainActivity.this,DashboardActivity.class);
                             startActivity(intent);
                             finish();

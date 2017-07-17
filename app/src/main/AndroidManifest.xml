@@ -42,6 +42,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".DashboardActivity" />
         <activity android:name=".GroupChatActivity" />
+        <activity android:name=".CustomerServiceBot.MainActivityCSB"></activity>
     </application>
 
 </manifest>

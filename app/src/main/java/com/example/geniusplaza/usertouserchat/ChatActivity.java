@@ -44,6 +44,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
@@ -54,9 +55,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import es.dmoral.toasty.Toasty;
+
 public class ChatActivity extends AppCompatActivity {
 
-    private ImageView receiverProfilePic;
+    private CircularImageView receiverProfilePic;
     private TextView receiverName;
     private User receivingUser;
     private EditText textMsgContent;
@@ -76,7 +79,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        receiverProfilePic= (ImageView) findViewById(R.id.imageViewReceiverProfilePic);
+        receiverProfilePic= (CircularImageView) findViewById(R.id.imageViewReceiverProfilePic);
         receiverName= (TextView) findViewById(R.id.textViewReceiverName);
         textMsgContent= (EditText) findViewById(R.id.editTextTextMsg);
         sendtextMsg= (ImageView) findViewById(R.id.imageViewSendTextMsg);
@@ -140,7 +143,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     textMsgContent.setText("");
                 }else {
-                    Toast.makeText(getApplicationContext(),"Please enter your message",Toast.LENGTH_SHORT).show();
+                    Toasty.warning(getApplicationContext(),"Please enter your message",Toast.LENGTH_SHORT, true).show();
                 }
             }
         });
@@ -263,7 +266,7 @@ public class ChatActivity extends AppCompatActivity {
             uploadTask.addOnFailureListener(ChatActivity.this, new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(),"Image Sending Failed..Please try again",Toast.LENGTH_SHORT).show();
+                    Toasty.error(getApplicationContext(),"Image Sending Failed..Please try again",Toast.LENGTH_SHORT, true).show();
                 }
             });
         }
@@ -278,7 +281,7 @@ public class ChatActivity extends AppCompatActivity {
 
         }else {
             Log.d("demo","inside showconvo empty");
-            Toast.makeText(getApplicationContext(),"Send Message/Image to start conversation",Toast.LENGTH_SHORT).show();
+            Toasty.info(getApplicationContext(),"Send Message/Image to start conversation",Toast.LENGTH_SHORT, true).show();
         }
     }
 

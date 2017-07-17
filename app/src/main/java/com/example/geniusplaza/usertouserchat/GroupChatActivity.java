@@ -3,6 +3,7 @@ package com.example.geniusplaza.usertouserchat;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geniusplaza.usertouserchat.CustomerServiceBot.MainActivityCSB;
 import com.example.geniusplaza.usertouserchat.Model.ChatMessage;
 import com.example.geniusplaza.usertouserchat.Model.User;
 import com.example.geniusplaza.usertouserchat.Tutor.POJO.Pod;
@@ -30,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import es.dmoral.toasty.Toasty;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -78,8 +81,15 @@ public class GroupChatActivity extends AppCompatActivity {
                 // of ChatMessage to the Firebase database
 
                 Log.d("Display name",FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+                if(input.getText().toString().toLowerCase().contains("@help")){
+                    Intent i = new Intent(GroupChatActivity.this, MainActivityCSB.class);
+                    startActivity(i);
+                    finish();
+                    return;
+                }
                 FirebaseDatabase.getInstance().getReference().child("GroupChat").push()
-                        .setValue(new ChatMessage(input.getText().toString(),
+                        .setValue(new ChatMessage(input.getText().toString()+":",
                                 existingUserProfile.getFirstName().toString())
                         );
                 if(input.getText().toString().toLowerCase().contains("@tutor")){
@@ -90,7 +100,6 @@ public class GroupChatActivity extends AppCompatActivity {
 
 
                 }
-
                 // Clear the input
                 input.setText("");
             }
@@ -125,7 +134,7 @@ public class GroupChatActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.menu,menu);
+        menuInflater.inflate(R.menu.menu_groupchat,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -141,7 +150,13 @@ public class GroupChatActivity extends AppCompatActivity {
                 Intent intent1=new Intent(this, MainActivity.class);
                 startActivity(intent1);
                 finish();
-
+            case R.id.item_about:
+                new AlertDialog.Builder(GroupChatActivity.this)
+                        .setTitle("HOW TO USE")
+                        .setMessage("To speak with tutor add \'@tutor\' annotation followed by the question\n\nTo get intouch with a customer service representative type \'@help\'")
+                        .setNegativeButton("Done",null)
+                        .create()
+                        .show();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -177,7 +192,7 @@ public class GroupChatActivity extends AppCompatActivity {
                 if(result!= null){
                     FirebaseDatabase.getInstance().getReference().child("GroupChat").push()
                             .setValue(new ChatMessage(result,
-                                    "Tutor ")
+                                    "Tutor: ")
                             );
                     result = "";
                 }
@@ -186,7 +201,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(GroupChatActivity.this, "No results, Please try rewording the input", Toast.LENGTH_LONG).show();
+                Toasty.error(GroupChatActivity.this, "No results, Please try rewording the input", Toast.LENGTH_LONG, true).show();
             }
 
             @Override
