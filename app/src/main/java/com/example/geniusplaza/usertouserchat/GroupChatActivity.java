@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,11 +48,12 @@ public class GroupChatActivity extends AppCompatActivity {
     public DatabaseReference mDatabase;
     public String result ="";
     public String resultDisplay;
+    ProgressBar mProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
-
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
             // Load chat room contents
         displayChatMessages();
 
@@ -163,6 +165,7 @@ public class GroupChatActivity extends AppCompatActivity {
     }
     public String tutorSelected(String Query){
         String searchWords = Query.replace("+", "plus");
+        mProgressBar.setVisibility(View.VISIBLE);
         RestClient.getExampleApi().postGetQueryResult(searchWords)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Query>() {
             @Override
@@ -196,12 +199,13 @@ public class GroupChatActivity extends AppCompatActivity {
                             );
                     result = "";
                 }
-
+                mProgressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onError(Throwable e) {
                 Toasty.error(GroupChatActivity.this, "No results, Please try rewording the input", Toast.LENGTH_LONG, true).show();
+                mProgressBar.setVisibility(View.GONE);
             }
 
             @Override
