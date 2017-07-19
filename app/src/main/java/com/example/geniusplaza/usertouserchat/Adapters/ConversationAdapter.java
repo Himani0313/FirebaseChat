@@ -39,7 +39,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     PrettyTime prettyTime=new PrettyTime();
     private SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
-
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     public ConversationAdapter(Context mContext, ArrayList<Message> mData) {
         this.mContext = mContext;
         this.mData = mData;
@@ -76,7 +76,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         LinearLayout senderMsgLayout=holder.senderMsgLayout;
         LinearLayout receiverMsgLayout=holder.receiverMsgLayout;
 
-        if (message.getSenderId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+        if (message.getSenderId().equals(firebaseAuth.getCurrentUser().getUid())){
             receiverMsgLayout.setVisibility(View.GONE);
             senderMsgLayout.setVisibility(View.VISIBLE);
             if (!message.getMsgContent().isEmpty() && message.getMsgContent()!=null){
@@ -95,7 +95,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                 e.printStackTrace();
             }
 
-        }else if (message.getReceiverId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+        }else if (message.getReceiverId().equals(firebaseAuth.getCurrentUser().getUid())){
             senderMsgLayout.setVisibility(View.GONE);
             receiverMsgLayout.setVisibility(View.VISIBLE);
             if (!message.getMsgContent().isEmpty() && message.getMsgContent()!=null){
@@ -117,7 +117,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         senderMsgLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("chatroom")
+                mDatabase.child("users").child(firebaseAuth.getCurrentUser().getUid()).child("chatroom")
                         .child(message.getReceiverId()).child("messages").child(message.getMsgKey()).removeValue();
                 Toasty.info(getContext(),"Message deleted",Toast.LENGTH_SHORT, true).show();
                 return false;
@@ -127,7 +127,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         receiverMsgLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("chatroom")
+                mDatabase.child("users").child(firebaseAuth.getCurrentUser().getUid()).child("chatroom")
                         .child(message.getSenderId()).child("messages").child(message.getMsgKey()).removeValue();
                 Toasty.info(getContext(),"Message deleted",Toast.LENGTH_SHORT, true).show();
                 return false;

@@ -56,6 +56,10 @@ dependencies {
     compile 'com.ibm.mobilefirstplatform.clientsdk.android:analytics:1.1.0'
     compile 'com.github.GrenderG:Toasty:1.2.5'
     compile 'com.github.sharish:ShimmerRecyclerView:v1.0.1'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

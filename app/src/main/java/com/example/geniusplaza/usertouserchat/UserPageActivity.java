@@ -47,11 +47,13 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
     RecyclerView usersRecyclerView, inboxRecyclerView;
     UsersDetailsAdapter usersDetailsAdapter;
     InboxAdapter inboxAdapter;
+    FirebaseAuth firebaseAuth;
     ArrayList<User> allUsersList=new ArrayList<>();
     ArrayList<InboxObj> allInboxList=new ArrayList<>();
     private GoogleApiClient mGoogleApiClient;
     private RecyclerView.LayoutManager horizontalLayoutManager,verticalLayoutManager;
     private CharSequence options[] = new CharSequence[] {"View Profile", "Send Message"};
+    ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(usersRecyclerView);
         snapHelper.attachToRecyclerView(inboxRecyclerView);
-
+        firebaseAuth = FirebaseAuth.getInstance();
         mDatabase= FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").addValueEventListener(new ValueEventListener() {
             @Override
@@ -73,11 +75,11 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
                 Log.d("demo","datasnapshot"+dataSnapshot.getChildren().toString());
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
                     DatabaseReference dbRefUser= ds.getRef();
-                    dbRefUser.child("profile").addValueEventListener(new ValueEventListener() {
+                    valueEventListener = new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             User user=dataSnapshot.getValue(User.class);
-                            if (!user.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                            if (!user.getUid().equals(firebaseAuth.getCurrentUser().getUid())){
                                 allUsersList.add(user);
                             }
                             //set users to recycler view
@@ -88,7 +90,8 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
                         public void onCancelled(DatabaseError databaseError) {
 
                         }
-                    });
+                    };
+                    dbRefUser.child("profile").addValueEventListener(valueEventListener);
                 }
             }
 
@@ -97,8 +100,7 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
 
             }
         });
-
-        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").addValueEventListener(new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 allInboxList.clear();
@@ -114,7 +116,8 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        mDatabase.child("users").child(firebaseAuth.getCurrentUser().getUid()).child("inboxObjs").addValueEventListener(valueEventListener);
     }
 
     @Override
@@ -136,9 +139,10 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
             case R.id.item_option_view_profile:
                 Intent intent= new Intent(this,ProfileDetailsActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             case R.id.item_option_logout:
-                FirebaseAuth.getInstance().signOut();
+                firebaseAuth.signOut();
                 Intent intent1=new Intent(this, MainActivity.class);
                 startActivity(intent1);
                 finish();
@@ -210,5 +214,12 @@ public class UserPageActivity extends AppCompatActivity implements InboxAdapter.
         Intent intent = new Intent(UserPageActivity.this,ChatActivity.class);
         intent.putExtra("receivingUser",user);
         startActivity(intent);
+        finish();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        inboxRecyclerView.setAdapter(null);
+        usersRecyclerView.setAdapter(null);
     }
 }

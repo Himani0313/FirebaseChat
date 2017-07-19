@@ -46,6 +46,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private FirebaseListAdapter<ChatMessage> adapter;
     public User existingUserProfile;
     public DatabaseReference mDatabase;
+    public FirebaseAuth firebaseAuth;
     public String result ="";
     public String resultDisplay;
     ProgressBar mProgressBar;
@@ -55,13 +56,16 @@ public class GroupChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_chat);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
             // Load chat room contents
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        firebaseAuth =FirebaseAuth.getInstance();
         displayChatMessages();
 
         FloatingActionButton fab =
                 (FloatingActionButton)findViewById(R.id.fab);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        Log.d("current user uid",FirebaseAuth.getInstance().getCurrentUser().getUid());
-        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("profile").addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+        Log.d("current user uid",firebaseAuth.getCurrentUser().getUid());
+        mDatabase.child("users").child(firebaseAuth.getCurrentUser().getUid()).child("profile").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 existingUserProfile = dataSnapshot.getValue(User.class);
@@ -82,7 +86,7 @@ public class GroupChatActivity extends AppCompatActivity {
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database
 
-                Log.d("Display name",FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                Log.d("Display name",firebaseAuth.getCurrentUser().getDisplayName());
 
                 if(input.getText().toString().toLowerCase().contains("@help")){
                     Intent i = new Intent(GroupChatActivity.this, MainActivityCSB.class);
@@ -90,7 +94,7 @@ public class GroupChatActivity extends AppCompatActivity {
                     finish();
                     return;
                 }
-                FirebaseDatabase.getInstance().getReference().child("GroupChat").push()
+                mDatabase.child("GroupChat").push()
                         .setValue(new ChatMessage(input.getText().toString()+":",
                                 existingUserProfile.getFirstName().toString())
                         );
@@ -111,7 +115,7 @@ public class GroupChatActivity extends AppCompatActivity {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-                R.layout.message, FirebaseDatabase.getInstance().getReference().child("GroupChat")) {
+                R.layout.message, mDatabase.child("GroupChat")) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 // Get references to the views of message.xml
@@ -148,7 +152,7 @@ public class GroupChatActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.item_option_logout:
-                FirebaseAuth.getInstance().signOut();
+                firebaseAuth.signOut();
                 Intent intent1=new Intent(this, MainActivity.class);
                 startActivity(intent1);
                 finish();
@@ -175,29 +179,37 @@ public class GroupChatActivity extends AppCompatActivity {
 
             @Override
             public void onNext(Query value) {
-                for (Pod i:value.getQueryresult().getPods()){
-                    Log.d("Pre if Result Value: " , i.toString());
-                    Log.d("Titles", i.getTitle());
-                    if(i.getTitle().equals("Result")||i.getTitle().equals("Results")){
-                        Log.d("Result Value: " , i.toString());
-                        result += "Result:\n";
-                        result += i.getSubpods().get(0).getPlaintext().toString()+"\n";
-                    }
-                    if(i.getTitle().equals("Definitions") || i.getTitle().equals("Definition")){
-                        Log.d("Result Value: " , i.toString());
+                if(value.getQueryresult().getPods() != null){
+                    for (Pod i:value.getQueryresult().getPods()){
+                        Log.d("Pre if Result Value: " , i.toString());
+                        Log.d("Titles", i.getTitle());
+                        if(i.getTitle().equals("Result")||i.getTitle().equals("Results")){
+                            Log.d("Result Value: " , i.toString());
+                            result += "Result:\n";
+                            result += i.getSubpods().get(0).getPlaintext().toString()+"\n";
+                        }
+                        if(i.getTitle().equals("Definitions") || i.getTitle().equals("Definition")){
+                            Log.d("Result Value: " , i.toString());
 //                        results.setText(i.getSubpods().get(0).getPlaintext().toString());
 
-                        result += "Definition:\n";
-                        result += i.getSubpods().get(0).getPlaintext().toString()+"\n";
-                    }
+                            result += "Definition:\n";
+                            result += i.getSubpods().get(0).getPlaintext().toString()+"\n";
+                        }
 
+                    }
                 }
-                if(result!= null){
-                    FirebaseDatabase.getInstance().getReference().child("GroupChat").push()
+                else{
+                    Toasty.error(getApplicationContext(),"Try rewording the input",Toast.LENGTH_SHORT,true).show();
+                }
+                if(result != ""){
+                    mDatabase.child("GroupChat").push()
                             .setValue(new ChatMessage(result,
                                     "Tutor: ")
                             );
                     result = "";
+                }
+                else{
+                    Toasty.error(getApplicationContext(),"Try rewording the input",Toast.LENGTH_SHORT,true).show();
                 }
                 mProgressBar.setVisibility(View.GONE);
             }
@@ -216,5 +228,9 @@ public class GroupChatActivity extends AppCompatActivity {
         return result;
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        adapter.cleanup();
+    }
 }

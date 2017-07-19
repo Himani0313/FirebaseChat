@@ -59,9 +59,9 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
     Random random = new Random();
     int m = random.nextInt(9999 - 1000) + 1000;
     private static final int NOTIFICATION_ID = 1;
-
+    FirebaseAuth firebaseAuth= FirebaseAuth.getInstance();
     public InboxAdapter(final ArrayList<InboxObj> mData, Context mContext) {
-        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("users").child(firebaseAuth.getCurrentUser().getUid()).child("inboxObjs").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mData.clear();
@@ -115,7 +115,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
         View container=holder.container;
 
 
-        if (inboxObj.getSenderID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+        if (inboxObj.getSenderID().equals(firebaseAuth.getCurrentUser().getUid())){
             Log.d("demo","bindHolder sender matched");
 
             mDatabase.child("users").child(inboxObj.getReceiverID()).child("profile").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -183,7 +183,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> 
                     InboxObj current_object = inboxObj;
                     current_object.setIslastMsgSeen(true);
                     Log.d("Onclick Username: ", receiverUser.getFirstName());
-                    mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("inboxObjs").child(receiverUserPassed.get(position).getUid()).setValue(current_object);
+                    mDatabase.child("users").child(firebaseAuth.getCurrentUser().getUid()).child("inboxObjs").child(receiverUserPassed.get(position).getUid()).setValue(current_object);
 
                     Log.d("ONCLICK POSITION",String.valueOf(position));
                     Log.d("ONCLICK Sender Id", inboxObj.getSenderID());
